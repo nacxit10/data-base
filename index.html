@@ -5,10 +5,820 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Base de Datos de Dispositivos</title>
     <style>
-        /* (se omite por longitud, pero en el archivo irá completo) */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2c3e50, #3498db);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .menu-bar {
+            background: #34495e;
+            padding: 0;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0;
+        }
+
+        .menu-btn {
+            background: none;
+            border: none;
+            color: white;
+            padding: 15px 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            border-radius: 0;
+        }
+
+        .menu-btn:hover {
+            background: #2c3e50;
+            transform: translateY(-2px);
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .form-section {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            border-left: 5px solid #3498db;
+        }
+
+        .form-section h3 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            color: #34495e;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+        }
+
+        .form-group input, .form-group select, .form-group textarea {
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            height: 80px;
+        }
+
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin: 5px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #27ae60, #229954);
+            color: white;
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, #f39c12, #e67e22);
+            color: white;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .table-container {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-top: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: linear-gradient(135deg, #34495e, #2c3e50);
+            color: white;
+            padding: 15px 10px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+
+        td {
+            padding: 12px 10px;
+            border-bottom: 1px solid #ecf0f1;
+            font-size: 0.85rem;
+        }
+
+        tr:hover {
+            background: #f8f9fa;
+        }
+
+        .actions {
+            display: flex;
+            gap: 5px;
+        }
+
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 0.8rem;
+        }
+
+        .search-bar {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            align-items: center;
+        }
+
+        .search-bar input {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .stat-card h3 {
+            font-size: 2rem;
+            margin-bottom: 5px;
+        }
+
+        .stat-card p {
+            opacity: 0.9;
+        }
+
+        .password-field {
+            position: relative;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #666;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .alert {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-danger {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .menu-bar {
+                flex-direction: column;
+            }
+            
+            table {
+                font-size: 0.8rem;
+            }
+            
+            th, td {
+                padding: 8px 5px;
+            }
+        }
     </style>
 </head>
 <body>
-    <!-- (Contenido completo del body ya proporcionado) -->
-</body>
-</html>
+    <div class="container">
+        <div class="header">
+            <h1>📊 Base de Datos de Dispositivos</h1>
+            <p>Sistema de Inventario y Gestión de Equipos</p>
+        </div>
+
+        <div class="menu-bar">
+            <button class="menu-btn" onclick="showSection('dashboard')">📈 Dashboard</button>
+            <button class="menu-btn" onclick="showSection('add')">➕ Agregar Dispositivo</button>
+            <button class="menu-btn" onclick="showSection('list')">📋 Lista de Dispositivos</button>
+            <button class="menu-btn" onclick="showSection('search')">🔍 Buscar</button>
+            <button class="menu-btn" onclick="showSection('reports')">📊 Reportes</button>
+            <button class="menu-btn" onclick="exportToExcel()">📥 Exportar Excel</button>
+            <button class="menu-btn" onclick="importFromExcel()">📤 Importar Excel</button>
+        </div>
+
+        <div class="content">
+            <!-- Dashboard Section -->
+            <div id="dashboard-section" class="section">
+                <div class="stats">
+                    <div class="stat-card">
+                        <h3 id="total-devices">0</h3>
+                        <p>Total de Dispositivos</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3 id="windows-devices">0</h3>
+                        <p>Dispositivos Windows</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3 id="mac-devices">0</h3>
+                        <p>Dispositivos Mac</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3 id="linux-devices">0</h3>
+                        <p>Dispositivos Linux</p>
+                    </div>
+                </div>
+                <h3>Resumen del Sistema</h3>
+                <p>Bienvenido al sistema de gestión de dispositivos. Utiliza el menú superior para navegar entre las diferentes funciones.</p>
+            </div>
+
+            <!-- Add Device Section -->
+            <div id="add-section" class="section hidden">
+                <div class="form-section">
+                    <h3>➕ Agregar Nuevo Dispositivo</h3>
+                    <form id="device-form">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="deviceName">NOMBRE DEL DISPOSITIVO *</label>
+                                <input type="text" id="deviceName" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="operator">OPERADOR *</label>
+                                <select id="operator" required>
+                                    <option value="">Seleccionar...</option>
+                                    <option value="Empresa A">Empresa A</option>
+                                    <option value="Empresa B">Empresa B</option>
+                                    <option value="Empresa C">Empresa C</option>
+                                    <option value="Interno">Interno</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="deviceId">ID DISPOSITIVO *</label>
+                                <input type="text" id="deviceId" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="processor">PROCESADOR *</label>
+                                <input type="text" id="processor" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="hardDrive">DISCO DURO *</label>
+                                <input type="text" id="hardDrive" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="ram">RAM *</label>
+                                <input type="text" id="ram" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="os">SISTEMA OPERATIVO *</label>
+                                <select id="os" required>
+                                    <option value="">Seleccionar...</option>
+                                    <option value="Windows 11">Windows 11</option>
+                                    <option value="Windows 10">Windows 10</option>
+                                    <option value="macOS">macOS</option>
+                                    <option value="Ubuntu">Ubuntu</option>
+                                    <option value="Linux">Linux</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="antivirus">ANTIVIRUS</label>
+                                <input type="text" id="antivirus">
+                            </div>
+                            <div class="form-group">
+                                <label for="user">USUARIO *</label>
+                                <input type="text" id="user" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="userPassword">CONTRASEÑA USUARIO</label>
+                                <div class="password-field">
+                                    <input type="password" id="userPassword">
+                                    <button type="button" class="password-toggle" onclick="togglePassword('userPassword')">👁️</button>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="admin">ADMINISTRADOR</label>
+                                <input type="text" id="admin">
+                            </div>
+                            <div class="form-group">
+                                <label for="adminPassword">CONTRASEÑA ADMINISTRADOR</label>
+                                <div class="password-field">
+                                    <input type="password" id="adminPassword">
+                                    <button type="button" class="password-toggle" onclick="togglePassword('adminPassword')">👁️</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group" style="margin-top: 20px;">
+                            <label for="observations">OBSERVACIONES</label>
+                            <textarea id="observations" placeholder="Notas adicionales..."></textarea>
+                        </div>
+                        <div style="margin-top: 20px;">
+                            <button type="submit" class="btn btn-success">💾 Guardar Dispositivo</button>
+                            <button type="button" class="btn btn-warning" onclick="clearForm()">🗑️ Limpiar Formulario</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- List Section -->
+            <div id="list-section" class="section hidden">
+                <h3>📋 Lista de Dispositivos</h3>
+                <div class="search-bar">
+                    <input type="text" id="list-search" placeholder="Buscar en la lista..." onkeyup="filterTable()">
+                    <button class="btn btn-primary" onclick="filterTable()">🔍 Buscar</button>
+                </div>
+                <div class="table-container">
+                    <table id="devices-table">
+                        <thead>
+                            <tr>
+                                <th>NOMBRE</th>
+                                <th>OPERADOR</th>
+                                <th>ID</th>
+                                <th>PROCESADOR</th>
+                                <th>DISCO DURO</th>
+                                <th>RAM</th>
+                                <th>SO</th>
+                                <th>ANTIVIRUS</th>
+                                <th>USUARIO</th>
+                                <th>ACCIONES</th>
+                            </tr>
+                        </thead>
+                        <tbody id="devices-tbody">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Search Section -->
+            <div id="search-section" class="section hidden">
+                <div class="form-section">
+                    <h3>🔍 Búsqueda Avanzada</h3>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="search-name">Nombre del Dispositivo</label>
+                            <input type="text" id="search-name">
+                        </div>
+                        <div class="form-group">
+                            <label for="search-operator">Operador</label>
+                            <select id="search-operator">
+                                <option value="">Todos</option>
+                                <option value="Empresa A">Empresa A</option>
+                                <option value="Empresa B">Empresa B</option>
+                                <option value="Empresa C">Empresa C</option>
+                                <option value="Interno">Interno</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="search-os">Sistema Operativo</label>
+                            <select id="search-os">
+                                <option value="">Todos</option>
+                                <option value="Windows 11">Windows 11</option>
+                                <option value="Windows 10">Windows 10</option>
+                                <option value="macOS">macOS</option>
+                                <option value="Ubuntu">Ubuntu</option>
+                                <option value="Linux">Linux</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="search-user">Usuario</label>
+                            <input type="text" id="search-user">
+                        </div>
+                    </div>
+                    <div style="margin-top: 20px;">
+                        <button class="btn btn-primary" onclick="performAdvancedSearch()">🔍 Buscar</button>
+                        <button class="btn btn-warning" onclick="clearSearch()">🗑️ Limpiar Búsqueda</button>
+                    </div>
+                </div>
+                <div id="search-results" class="table-container hidden">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>NOMBRE</th>
+                                <th>OPERADOR</th>
+                                <th>ID</th>
+                                <th>SO</th>
+                                <th>USUARIO</th>
+                                <th>ACCIONES</th>
+                            </tr>
+                        </thead>
+                        <tbody id="search-results-tbody">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Reports Section -->
+            <div id="reports-section" class="section hidden">
+                <h3>📊 Reportes del Sistema</h3>
+                <div class="stats">
+                    <div class="stat-card">
+                        <h3 id="report-total">0</h3>
+                        <p>Total de Dispositivos</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3 id="report-operators">0</h3>
+                        <p>Operadores Diferentes</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3 id="report-windows">0</h3>
+                        <p>Sistemas Windows</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3 id="report-others">0</h3>
+                        <p>Otros Sistemas</p>
+                    </div>
+                </div>
+                <div class="form-section">
+                    <h4>Generar Reportes</h4>
+                    <button class="btn btn-primary" onclick="generateReport('os')">📊 Reporte por SO</button>
+                    <button class="btn btn-success" onclick="generateReport('operator')">🏢 Reporte por Operador</button>
+                    <button class="btn btn-warning" onclick="generateReport('full')">📋 Reporte Completo</button>
+                </div>
+                <div id="report-content"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for device details -->
+    <div id="device-modal" class="modal hidden">
+        <div class="modal-content">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h3>Detalles del Dispositivo</h3>
+                <button class="btn btn-danger btn-sm" onclick="closeModal()">❌</button>
+            </div>
+            <div id="modal-content-body"></div>
+            <div style="margin-top: 20px; text-align: center;">
+                <button class="btn btn-warning" onclick="editDevice()">✏️ Editar</button>
+                <button class="btn btn-danger" onclick="deleteDevice()">🗑️ Eliminar</button>
+                <button class="btn btn-primary" onclick="closeModal()">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Almacenamiento de datos en memoria
+        let devices = [];
+        let currentDeviceIndex = -1;
+
+        // Inicializar la aplicación
+        document.addEventListener('DOMContentLoaded', function() {
+            loadSampleData();
+            showSection('dashboard');
+            updateStats();
+        });
+
+        // Datos de ejemplo
+        function loadSampleData() {
+            devices = [
+                {
+                    deviceName: 'PC-OFICINA-01',
+                    operator: 'Empresa A',
+                    deviceId: 'DEV001',
+                    processor: 'Intel Core i7-12700',
+                    hardDrive: '512GB SSD',
+                    ram: '16GB DDR4',
+                    os: 'Windows 11',
+                    antivirus: 'Windows Defender',
+                    user: 'juan.perez',
+                    userPassword: 'user123',
+                    admin: 'admin',
+                    adminPassword: 'admin456',
+                    observations: 'Equipo principal de desarrollo'
+                },
+                {
+                    deviceName: 'LAPTOP-VENTAS-02',
+                    operator: 'Empresa B',
+                    deviceId: 'DEV002',
+                    processor: 'AMD Ryzen 5 5600H',
+                    hardDrive: '256GB SSD',
+                    ram: '8GB DDR4',
+                    os: 'Windows 10',
+                    antivirus: 'Norton 360',
+                    user: 'maria.lopez',
+                    userPassword: 'user789',
+                    admin: 'administrador',
+                    adminPassword: 'admin789',
+                    observations: 'Laptop para equipo de ventas'
+                }
+            ];
+        }
+
+        // Mostrar secciones
+        function showSection(sectionName) {
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.add('hidden');
+            });
+            document.getElementById(sectionName + '-section').classList.remove('hidden');
+            
+            if (sectionName === 'list') {
+                displayDevices();
+            } else if (sectionName === 'dashboard') {
+                updateStats();
+            } else if (sectionName === 'reports') {
+                updateReportStats();
+            }
+        }
+
+        // Manejar formulario
+        document.getElementById('device-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const device = {
+                deviceName: document.getElementById('deviceName').value,
+                operator: document.getElementById('operator').value,
+                deviceId: document.getElementById('deviceId').value,
+                processor: document.getElementById('processor').value,
+                hardDrive: document.getElementById('hardDrive').value,
+                ram: document.getElementById('ram').value,
+                os: document.getElementById('os').value,
+                antivirus: document.getElementById('antivirus').value,
+                user: document.getElementById('user').value,
+                userPassword: document.getElementById('userPassword').value,
+                admin: document.getElementById('admin').value,
+                adminPassword: document.getElementById('adminPassword').value,
+                observations: document.getElementById('observations').value
+            };
+
+            // Verificar ID único
+            if (devices.some(d => d.deviceId === device.deviceId)) {
+                showAlert('El ID del dispositivo ya existe. Por favor, use un ID único.', 'danger');
+                return;
+            }
+
+            devices.push(device);
+            showAlert('Dispositivo agregado exitosamente!', 'success');
+            clearForm();
+            updateStats();
+        });
+
+        // Limpiar formulario
+        function clearForm() {
+            document.getElementById('device-form').reset();
+        }
+
+        // Mostrar dispositivos en tabla
+        function displayDevices(devicesToShow = devices) {
+            const tbody = document.getElementById('devices-tbody');
+            tbody.innerHTML = '';
+
+            devicesToShow.forEach((device, index) => {
+                const row = tbody.insertRow();
+                row.innerHTML = `
+                    <td>${device.deviceName}</td>
+                    <td>${device.operator}</td>
+                    <td>${device.deviceId}</td>
+                    <td>${device.processor}</td>
+                    <td>${device.hardDrive}</td>
+                    <td>${device.ram}</td>
+                    <td>${device.os}</td>
+                    <td>${device.antivirus}</td>
+                    <td>${device.user}</td>
+                    <td class="actions">
+                        <button class="btn btn-primary btn-sm" onclick="viewDevice(${devices.indexOf(device)})">👁️</button>
+                        <button class="btn btn-warning btn-sm" onclick="editDeviceInline(${devices.indexOf(device)})">✏️</button>
+                        <button class="btn btn-danger btn-sm" onclick="confirmDelete(${devices.indexOf(device)})">🗑️</button>
+                    </td>
+                `;
+            });
+        }
+
+        // Ver detalles del dispositivo
+        function viewDevice(index) {
+            currentDeviceIndex = index;
+            const device = devices[index];
+            const modal = document.getElementById('device-modal');
+            const content = document.getElementById('modal-content-body');
+            
+            content.innerHTML = `
+                <div class="form-grid">
+                    <p><strong>Nombre:</strong> ${device.deviceName}</p>
+                    <p><strong>Operador:</strong> ${device.operator}</p>
+                    <p><strong>ID:</strong> ${device.deviceId}</p>
+                    <p><strong>Procesador:</strong> ${device.processor}</p>
+                    <p><strong>Disco Duro:</strong> ${device.hardDrive}</p>
+                    <p><strong>RAM:</strong> ${device.ram}</p>
+                    <p><strong>SO:</strong> ${device.os}</p>
+                    <p><strong>Antivirus:</strong> ${device.antivirus}</p>
+                    <p><strong>Usuario:</strong> ${device.user}</p>
+                    <p><strong>Admin:</strong> ${device.admin}</p>
+                    <p><strong>Observaciones:</strong> ${device.observations}</p>
+                </div>
+            `;
+            
+            modal.classList.remove('hidden');
+        }
+
+        // Cerrar modal
+        function closeModal() {
+            document.getElementById('device-modal').classList.add('hidden');
+        }
+
+        // Editar dispositivo
+        function editDevice() {
+            // Aquí iría la lógica de edición
+            showAlert('Función de edición no implementada en esta demo.', 'warning');
+        }
+
+        // Eliminar dispositivo
+        function deleteDevice() {
+            if (currentDeviceIndex >= 0) {
+                devices.splice(currentDeviceIndex, 1);
+                showAlert('Dispositivo eliminado exitosamente!', 'success');
+                closeModal();
+                displayDevices();
+                updateStats();
+            }
+        }
+
+        // Confirmar eliminación
+        function confirmDelete(index) {
+            if (confirm('¿Está seguro de que desea eliminar este dispositivo?')) {
+                devices.splice(index, 1);
+                showAlert('Dispositivo eliminado exitosamente!', 'success');
+                displayDevices();
+                updateStats();
+            }
+        }
+
+        // Filtrar tabla
+        function filterTable() {
+            const searchTerm = document.getElementById('list-search').value.toLowerCase();
+            const filteredDevices = devices.filter(device => 
+                Object.values(device).some(value => 
+                    value.toString().toLowerCase().includes(searchTerm)
+                )
+            );
+            displayDevices(filteredDevices);
+        }
+
+        // Búsqueda avanzada
+        function performAdvancedSearch() {
+            const name = document.getElementById('search-name').value.toLowerCase();
+            const operator = document.getElementById('search-operator').value;
+            const os = document.getElementById('search-os').value;
+            const user = document.getElementById('search-user').value.toLowerCase();
+
+            const results = devices.filter(device => {
+                return (!name || device.deviceName.toLowerCase().includes(name)) &&
+                       (!operator || device.operator === operator) &&
+                       (!os || device.os === os) &&
+                       (!user || device.user.toLowerCase().includes(user));
+            });
+
+            displaySearchResults(results);
+        }
+
+        // Mostrar resultados de búsqueda
+        function displaySearchResults(results) {
+            const container = document.getElementById('search-results');
+            const tbody = document.getElementById('search-results-tbody');
+            
+            tbody.innerHTML = '';
+            results.forEach((device, index) => {
+                const row = tbody.insertRow();
+                row.innerHTML = `
+                    <td>${device.deviceName}</td>
+                    <td>${device.operator}</td>
+                    <td>${device.deviceId}</td>
+                    <td>${device.os}</td>
+                    <td>${device.user}</td>
+                    <td>
+                        <button class="btn btn-primary btn-sm" onclick="viewDevice(${devices.indexOf(device)})">👁️ Ver</button>
+                    </td>
+                `;
+            });
+            
+            container.classList.remove('hidden');
+        }
+
+        // Limpiar búsqueda
+        function clearSearch() {
+            document.getElementById('search-name').value = '';
+            document.getElementById('search-operator').value = '';
+            document.getElementById('search-os').value = '';
+            document.getElementById('search-user').value = '';
+            document.getElementById('search-results').classList.add('
